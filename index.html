@@ -1,0 +1,3143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikSnap Pro - Advanced TikTok Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary: #00C4FF;
+      --primary-dark: #0095D9;
+      --secondary: #FF2D55;
+      --accent: #7B61FF;
+      --dark: #121212;
+      --darker: #0A0A0A;
+      --light: #FFFFFF;
+      --light-gray: #E0E0E0;
+      --medium-gray: #808080;
+      --dark-gray: #252525;
+      --success: #00C853;
+      --warning: #FFAB00;
+      --error: #FF3D00;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      
+      /* Light mode variables */
+      --bg-color: var(--darker);
+      --text-color: var(--light);
+      --card-bg: var(--dark);
+      --input-bg: var(--dark-gray);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #F5F7FA;
+      --text-color: #2D3748;
+      --card-bg: var(--light);
+      --input-bg: #EDF2F7;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 100;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .logo:hover {
+      transform: translateY(-2px);
+    }
+    
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .logo-icon i {
+      font-size: 22px;
+      color: white;
+    }
+    
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      background: var(--card-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      color: var(--text-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    nav ul {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    
+    nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: var(--transition);
+      position: relative;
+      padding: 5px 0;
+      opacity: 0.9;
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+    
+    nav a:hover {
+      color: var(--primary);
+      opacity: 1;
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    .mobile-menu {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+    
+    .mobile-menu:hover {
+      color: var(--primary);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .auth-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .auth-btn.login {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .auth-btn.signup {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      color: white;
+    }
+    
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 196, 255, 0.3);
+    }
+    
+    .hero {
+      text-align: center;
+      padding: 60px 0 40px;
+      max-width: 800px;
+      margin: 0 auto 50px;
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      animation: fadeInDown 1s;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      color: var(--medium-gray);
+      margin-bottom: 30px;
+      animation: fadeIn 1.5s;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .main-tool {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 50px;
+      animation: fadeInUp 1s;
+      transition: background-color 0.3s;
+    }
+    
+    .tool-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .tool-header h2 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .steps {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .step {
+      background: var(--input-bg);
+      color: var(--medium-gray);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    
+    .step.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 196, 255, 0.3);
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--medium-gray);
+      transition: var(--transition);
+    }
+    
+    input[type="url"], 
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 16px 16px 16px 50px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 15px;
+      outline: none;
+      transition: var(--transition);
+    }
+    
+    textarea {
+      min-height: 120px;
+      padding: 16px;
+      resize: vertical;
+    }
+    
+    input[type="url"]:focus,
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 196, 255, 0.2);
+    }
+    
+    input[type="url"]:focus + i,
+    input[type="text"]:focus + i {
+      color: var(--primary);
+    }
+    
+    .btn {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .btn:focus:not(:active)::after {
+      animation: ripple 0.6s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 196, 255, 0.3);
+    }
+    
+    .btn-secondary {
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--dark-gray);
+      transform: translateY(-2px);
+    }
+    
+    .btn-lg {
+      padding: 16px 32px;
+      font-size: 16px;
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .video-container {
+      margin-top: 25px;
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    
+    .video-wrapper {
+      position: relative;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+      background: var(--input-bg);
+      aspect-ratio: 9/16;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      transition: var(--transition);
+    }
+    
+    .video-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: var(--transition);
+    }
+    
+    .video-thumbnail:hover {
+      transform: scale(1.02);
+    }
+    
+    .video-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0.9;
+    }
+    
+    .video-play-icon:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .video-play-icon i {
+      color: white;
+      font-size: 24px;
+      margin-left: 5px;
+    }
+    
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+    
+    .video-loaded video {
+      display: block;
+    }
+    
+    .video-loaded .video-thumbnail,
+    .video-loaded .video-play-icon {
+      display: none;
+    }
+    
+    .video-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .video-info {
+      background: var(--input-bg);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      transition: background-color 0.3s;
+    }
+    
+    .video-info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+    
+    .video-info-item:hover {
+      background: rgba(0,0,0,0.03);
+    }
+    
+    .video-info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .video-info-label {
+      color: var(--medium-gray);
+      font-size: 14px;
+    }
+    
+    .video-info-value {
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      animation: fadeIn 0.3s;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 15px;
+      border: 4px solid rgba(0, 196, 255, 0.1);
+      border-left-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      margin-top: 10px;
+      color: var(--medium-gray);
+      font-size: 15px;
+    }
+    
+    .progress-container {
+      width: 100%;
+      background-color: var(--input-bg);
+      border-radius: var(--border-radius);
+      margin: 20px 0;
+      padding: 15px;
+      display: none;
+      animation: fadeIn 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .progress-title {
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .progress-percent {
+      font-weight: 600;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background-color: rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+    
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0%;
+      transition: width 0.3s;
+    }
+    
+    .progress-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--medium-gray);
+    }
+    
+    .error-message {
+      color: var(--error);
+      background: rgba(255,61,0,0.1);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      margin: 20px 0;
+      display: none;
+      animation: shake 0.5s;
+    }
+    
+    .success-message {
+      color: var(--success);
+      background: rgba(0,200,83,0.1);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      margin: 20px 0;
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 50px 0;
+    }
+    
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: white;
+      transition: var(--transition);
+    }
+    
+    .feature-card:hover .feature-icon {
+      transform: rotate(15deg) scale(1.1);
+    }
+    
+    .feature-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .feature-desc {
+      color: var(--medium-gray);
+      font-size: 15px;
+    }
+    
+    .how-it-works {
+      margin: 60px 0;
+    }
+    
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+    
+    .steps-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+    
+    .step-card {
+      flex: 1;
+      max-width: 300px;
+      text-align: center;
+      padding: 30px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    
+    .step-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: var(--input-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: 700;
+      color: var(--primary);
+      transition: var(--transition);
+    }
+    
+    .step-card:hover .step-number {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .step-desc {
+      color: var(--medium-gray);
+      font-size: 15px;
+    }
+    
+    .faq {
+      margin: 60px 0;
+    }
+    
+    .faq h2 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+    
+    .faq-item {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      margin-bottom: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    
+    .faq-question {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .faq-question:hover {
+      background: rgba(0,0,0,0.03);
+    }
+    
+    .faq-question i {
+      transition: transform 0.3s;
+    }
+    
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s, padding 0.3s;
+      color: var(--medium-gray);
+    }
+    
+    .faq-item.active .faq-question {
+      color: var(--primary);
+    }
+    
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+      padding: 0 20px 20px;
+    }
+    
+    footer {
+      background: var(--card-bg);
+      padding: 40px 0;
+      margin-top: 60px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    
+    .footer-column {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .footer-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-links a {
+      color: var(--medium-gray);
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-block;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: var(--input-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      color: var(--medium-gray);
+      font-size: 14px;
+    }
+    
+    /* New Features */
+    .quality-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .quality-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+    
+    .quality-btn:hover {
+      background: var(--dark-gray);
+    }
+    
+    .quality-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    
+    .share-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .share-btn:hover {
+      opacity: 0.8;
+    }
+    
+    .share-btn.facebook {
+      background: #1877F2;
+      color: white;
+    }
+    
+    .share-btn.twitter {
+      background: #1DA1F2;
+      color: white;
+    }
+    
+    .share-btn.whatsapp {
+      background: #25D366;
+      color: white;
+    }
+    
+    .history-container {
+      margin-top: 30px;
+      display: none;
+    }
+    
+    .history-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-list {
+      background: var(--input-bg);
+      border-radius: var(--border-radius);
+      padding: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      transition: background-color 0.3s;
+    }
+    
+    .history-item {
+      padding: 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    
+    .history-item a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+    
+    .history-item .delete-btn {
+      color: var(--error);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Video Modal */
+    .video-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+    
+    .video-modal-content {
+      width: 90%;
+      max-width: 800px;
+      position: relative;
+    }
+    
+    .video-modal-content video {
+      width: 100%;
+      max-height: 80vh;
+      border-radius: var(--border-radius);
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .close-modal:hover {
+      color: var(--primary);
+    }
+    
+    /* Video Controls */
+    .video-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: center;
+    }
+    
+    .control-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--input-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      color: var(--text-color);
+    }
+    
+    .control-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Video Stats */
+    .video-stats {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+      color: var(--medium-gray);
+    }
+    
+    /* Fullscreen Button */
+    .fullscreen-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      color: white;
+    }
+    
+    .fullscreen-btn:hover {
+      background: var(--primary);
+    }
+    
+    /* Video Zoom Controls */
+    .zoom-controls {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .zoom-btn {
+      width: 36px;
+      height: 36px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .zoom-btn:hover {
+      background: var(--primary);
+    }
+    
+    /* Batch Download Section */
+    .batch-container {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.5s;
+    }
+    
+    .batch-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .batch-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .batch-list {
+      background: var(--input-bg);
+      border-radius: var(--border-radius);
+      padding: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      transition: background-color 0.3s;
+    }
+    
+    .batch-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .batch-item:last-child {
+      border-bottom: none;
+    }
+    
+    .batch-item input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+    
+    .batch-item .remove-btn {
+      color: var(--error);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Trim/Crop Section */
+    .trim-container {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.5s;
+    }
+    
+    .trim-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: var(--input-bg);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin-bottom: 15px;
+      transition: background-color 0.3s;
+    }
+    
+    .trim-range {
+      width: 100%;
+      margin: 10px 0;
+    }
+    
+    .trim-values {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    /* Watermark Customization */
+    .watermark-container {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.5s;
+    }
+    
+    .watermark-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: var(--input-bg);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      margin-bottom: 15px;
+      transition: background-color 0.3s;
+    }
+    
+    .watermark-preview {
+      width: 100%;
+      max-width: 400px;
+      height: 200px;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .watermark-image {
+      max-width: 100%;
+      max-height: 100%;
+      position: absolute;
+      opacity: 0.7;
+    }
+    
+    .watermark-position {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+    
+    .position-btn {
+      padding: 8px;
+      background: var(--card-bg);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .position-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .position-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    /* Auth Modal */
+    .auth-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+    
+    .auth-content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: var(--box-shadow);
+      transition: background-color 0.3s;
+    }
+    
+    .close-auth {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: var(--medium-gray);
+      font-size: 24px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .close-auth:hover {
+      color: var(--primary);
+    }
+    
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .auth-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      border-bottom: 2px solid transparent;
+    }
+    
+    .auth-tab.active {
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .auth-form {
+      display: none;
+    }
+    
+    .auth-form.active {
+      display: block;
+    }
+    
+    .auth-form-group {
+      margin-bottom: 15px;
+    }
+    
+    .auth-form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .auth-form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+    
+    .auth-submit {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .auth-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--medium-gray);
+    }
+    
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    /* Toggle Switch */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--input-bg);
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .steps-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .step-card {
+        max-width: 100%;
+      }
+      
+      .hero h1 {
+        font-size: 36px;
+      }
+      
+      .feature-card {
+        padding: 25px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        z-index: 99;
+        transition: background-color 0.3s;
+      }
+      
+      nav.active {
+        display: block;
+        animation: fadeInDown 0.3s;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .mobile-menu {
+        display: block;
+      }
+      
+      .auth-buttons {
+        display: none;
+      }
+      
+      .hero h1 {
+        font-size: 28px;
+      }
+      
+      .hero p {
+        font-size: 16px;
+      }
+      
+      .main-tool {
+        padding: 20px;
+      }
+      
+      .video-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .feature-card {
+        padding: 20px;
+      }
+      
+      .footer-column {
+        min-width: 150px;
+      }
+      
+      .video-play-icon {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .video-play-icon i {
+        font-size: 20px;
+      }
+      
+      .video-modal-content {
+        width: 95%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .hero h1 {
+        font-size: 24px;
+      }
+      
+      .hero p {
+        font-size: 15px;
+      }
+      
+      .tool-header h2 {
+        font-size: 20px;
+      }
+      
+      .steps {
+        flex-wrap: wrap;
+      }
+      
+      .step {
+        font-size: 12px;
+      }
+      
+      .feature-card {
+        min-width: 100%;
+      }
+      
+      .footer-column {
+        min-width: 100%;
+      }
+      
+      .quality-selector {
+        flex-direction: column;
+      }
+      
+      .quality-btn {
+        width: 100%;
+      }
+      
+      .share-buttons {
+        flex-direction: column;
+      }
+      
+      .share-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-water"></i>
+        </div>
+        <div class="logo-text">TikSnap Pro</div>
+      </a>
+      <nav id="mainNav">
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="auth-buttons">
+          <button class="auth-btn login" id="loginBtn">Login</button>
+          <button class="auth-btn signup" id="signupBtn">Sign Up</button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </header>
+    
+    <section class="hero">
+      <h1>Download TikTok Videos <span>Without Watermark</span></h1>
+      <p>Get high-quality TikTok videos without watermark instantly. Our advanced tools ensure the best quality with no traces.</p>
+      <button class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite animate__slower floating">
+        <i class="fas fa-download"></i> Try It Now
+      </button>
+    </section>
+    
+    <section class="main-tool" id="downloader">
+      <div class="tool-header">
+        <h2>TikTok Watermark Remover</h2>
+        <div class="steps">
+          <div class="step active">1. Paste URL</div>
+          <div class="step">2. Process</div>
+          <div class="step">3. Download</div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <i class="fas fa-link"></i>
+        <input type="url" id="videoUrl" placeholder="Paste TikTok video URL here..." required>
+      </div>
+      
+      <div class="switch-container">
+        <label class="switch">
+          <input type="checkbox" id="batchToggle">
+          <span class="slider"></span>
+        </label>
+        <span>Batch Download Mode</span>
+      </div>
+      
+      <div class="batch-container" id="batchContainer">
+        <div class="batch-header">
+          <h3>Multiple URLs</h3>
+          <div class="batch-actions">
+            <button class="btn btn-secondary" id="addBatchUrl">
+              <i class="fas fa-plus"></i> Add
+            </button>
+            <button class="btn btn-secondary" id="clearBatchUrls">
+              <i class="fas fa-trash"></i> Clear
+            </button>
+          </div>
+        </div>
+        <div class="batch-list" id="batchList">
+          <!-- Batch URLs will be added here -->
+        </div>
+      </div>
+      
+      <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+        <i class="fas fa-magic"></i> Remove Watermark & Download
+      </button>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p class="loading-text">Processing video and removing watermark...</p>
+      </div>
+      
+      <div class="error-message" id="errorMsg"></div>
+      <div class="success-message" id="successMsg"></div>
+      
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-header">
+          <div class="progress-title">Download Progress</div>
+          <div class="progress-percent" id="progressPercent">0%</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-details">
+          <span id="downloadedSize">0 MB</span>
+          <span id="totalSize">0 MB</span>
+        </div>
+      </div>
+      
+      <div class="video-container" id="videoContainer">
+        <div class="quality-selector" id="qualitySelector">
+          <button class="quality-btn active" data-quality="hd">HD Quality</button>
+          <button class="quality-btn" data-quality="sd">Standard Quality</button>
+          <button class="quality-btn" data-quality="audio">Audio Only</button>
+        </div>
+        
+        <div class="video-wrapper">
+          <img class="video-thumbnail" id="videoThumbnail" src="" alt="Video thumbnail">
+          <div class="video-play-icon" id="playButton">
+            <i class="fas fa-play"></i>
+          </div>
+          <video id="videoPlayer" controls></video>
+          <button class="fullscreen-btn" id="fullscreenBtn">
+            <i class="fas fa-expand"></i>
+          </button>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomInBtn">+</button>
+            <button class="zoom-btn" id="zoomOutBtn">-</button>
+            <button class="zoom-btn" id="resetZoomBtn">1:1</button>
+          </div>
+        </div>
+        
+        <div class="switch-container">
+          <label class="switch">
+            <input type="checkbox" id="trimToggle">
+            <span class="slider"></span>
+          </label>
+          <span>Trim Video</span>
+        </div>
+        
+        <div class="trim-container" id="trimContainer">
+          <div class="trim-controls">
+            <label for="trimStart">Start Time (seconds)</label>
+            <input type="range" id="trimStart" min="0" max="60" value="0" class="trim-range">
+            <div class="trim-values">
+              <span id="trimStartValue">0s</span>
+              <span id="trimEndValue">60s</span>
+            </div>
+            <label for="trimEnd">End Time (seconds)</label>
+            <input type="range" id="trimEnd" min="0" max="60" value="60" class="trim-range">
+          </div>
+        </div>
+        
+        <div class="switch-container">
+          <label class="switch">
+            <input type="checkbox" id="watermarkToggle">
+            <span class="slider"></span>
+          </label>
+          <span>Add Custom Watermark</span>
+        </div>
+        
+        <div class="watermark-container" id="watermarkContainer">
+          <div class="watermark-controls">
+            <label for="watermarkImage">Upload Watermark Image</label>
+            <input type="file" id="watermarkImage" accept="image/*">
+            
+            <label for="watermarkOpacity">Opacity</label>
+            <input type="range" id="watermarkOpacity" min="0" max="100" value="70">
+            
+            <label>Position</label>
+            <div class="watermark-position">
+              <button class="position-btn active" data-position="top-left">↖</button>
+              <button class="position-btn" data-position="top-center">↑</button>
+              <button class="position-btn" data-position="top-right">↗</button>
+              <button class="position-btn" data-position="middle-left">←</button>
+              <button class="position-btn" data-position="middle-center">•</button>
+              <button class="position-btn" data-position="middle-right">→</button>
+              <button class="position-btn" data-position="bottom-left">↙</button>
+              <button class="position-btn" data-position="bottom-center">↓</button>
+              <button class="position-btn" data-position="bottom-right">↘</button>
+            </div>
+            
+            <div class="watermark-preview">
+              <img src="" alt="Watermark Preview" id="watermarkPreview" class="watermark-image">
+            </div>
+          </div>
+        </div>
+        
+        <div class="video-stats">
+          <div class="stat-item">
+            <i class="fas fa-eye"></i>
+            <span id="viewCount">0 views</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-heart"></i>
+            <span id="likeCount">0 likes</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-comment"></i>
+            <span id="commentCount">0 comments</span>
+          </div>
+        </div>
+        
+        <div class="video-controls">
+          <button class="control-btn" id="rewindBtn" title="Rewind 10s">
+            <i class="fas fa-backward"></i>
+          </button>
+          <button class="control-btn" id="playPauseBtn" title="Play/Pause">
+            <i class="fas fa-play"></i>
+          </button>
+          <button class="control-btn" id="forwardBtn" title="Forward 10s">
+            <i class="fas fa-forward"></i>
+          </button>
+          <button class="control-btn" id="muteBtn" title="Mute/Unmute">
+            <i class="fas fa-volume-up"></i>
+          </button>
+          <button class="control-btn" id="speedBtn" title="Playback Speed">
+            <i class="fas fa-tachometer-alt"></i>
+          </button>
+          <button class="control-btn" id="loopBtn" title="Loop Video">
+            <i class="fas fa-redo"></i>
+          </button>
+        </div>
+        
+        <div class="video-info">
+          <div class="video-info-item">
+            <span class="video-info-label">Video Quality:</span>
+            <span class="video-info-value" id="videoQuality">HD 1080p</span>
+          </div>
+          <div class="video-info-item">
+            <span class="video-info-label">File Size:</span>
+            <span class="video-info-value" id="videoSize">12.4 MB</span>
+          </div>
+          <div class="video-info-item">
+            <span class="video-info-label">Duration:</span>
+            <span class="video-info-value" id="videoDuration">0:15</span>
+          </div>
+          <div class="video-info-item">
+            <span class="video-info-label">Watermark:</span>
+            <span class="video-info-value" id="watermarkStatus">Removed</span>
+          </div>
+        </div>
+        
+        <div class="video-actions">
+          <button class="btn btn-primary" id="downloadBtn">
+            <i class="fas fa-download"></i> Download Clean Video
+          </button>
+          <button class="btn btn-secondary" id="saveAudioBtn">
+            <i class="fas fa-music"></i> Extract Audio (MP3)
+          </button>
+          <button class="btn btn-secondary" id="saveGifBtn">
+            <i class="fas fa-photo-video"></i> Create GIF
+          </button>
+        </div>
+        
+        <div class="share-buttons">
+          <button class="share-btn facebook" id="shareFacebook">
+            <i class="fab fa-facebook-f"></i> Share
+          </button>
+          <button class="share-btn twitter" id="shareTwitter">
+            <i class="fab fa-twitter"></i> Tweet
+          </button>
+          <button class="share-btn whatsapp" id="shareWhatsapp">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </button>
+        </div>
+        
+        <div class="history-container" id="historyContainer">
+          <div class="history-title">
+            <span>Recent Downloads</span>
+            <button class="btn btn-secondary" id="clearHistory">Clear</button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+      <div class="video-modal-content">
+        <span class="close-modal" id="closeModal">&times;</span>
+        <video id="modalVideoPlayer" controls autoplay></video>
+      </div>
+    </div>
+    
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+      <div class="auth-content">
+        <span class="close-auth" id="closeAuth">&times;</span>
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="login">Login</div>
+          <div class="auth-tab" data-tab="signup">Sign Up</div>
+        </div>
+        
+        <form class="auth-form active" id="loginForm">
+          <div class="auth-form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" required>
+          </div>
+          <div class="auth-form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" required>
+          </div>
+          <button type="submit" class="auth-submit">Login</button>
+          <div class="auth-footer">
+            Don't have an account? <a href="#" id="showSignup">Sign up</a>
+          </div>
+        </form>
+        
+        <form class="auth-form" id="signupForm">
+          <div class="auth-form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" required>
+          </div>
+          <div class="auth-form-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" required>
+          </div>
+          <div class="auth-form-group">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" required>
+          </div>
+          <div class="auth-form-group">
+            <label for="signupConfirm">Confirm Password</label>
+            <input type="password" id="signupConfirm" required>
+          </div>
+          <button type="submit" class="auth-submit">Create Account</button>
+          <div class="auth-footer">
+            Already have an account? <a href="#" id="showLogin">Login</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <section class="features" id="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-water"></i>
+        </div>
+        <h3 class="feature-title">Watermark Removal</h3>
+        <p class="feature-desc">Completely remove TikTok watermarks without any quality loss using our advanced algorithms.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h3 class="feature-title">Batch Processing</h3>
+        <p class="feature-desc">Download multiple TikTok videos at once with our batch processing feature.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-cut"></i>
+        </div>
+        <h3 class="feature-title">Video Trimming</h3>
+        <p class="feature-desc">Trim your videos before downloading to get just the parts you want.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-stamp"></i>
+        </div>
+        <h3 class="feature-title">Custom Watermark</h3>
+        <p class="feature-desc">Add your own watermark to videos with customizable position and opacity.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h3 class="feature-title">User Accounts</h3>
+        <p class="feature-desc">Save your download history and preferences across devices with secure accounts.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <h3 class="feature-title">Dark/Light Mode</h3>
+        <p class="feature-desc">Choose your preferred theme for comfortable viewing in any environment.</p>
+      </div>
+    </section>
+    
+    <section class="how-it-works" id="how-it-works">
+      <h2>How It <span class="gradient-text">Works</span></h2>
+      
+      <div class="steps-container">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Paste TikTok URL</h3>
+          <p class="step-desc">Copy the link of the TikTok video you want to download and paste it in our tool.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Customize Settings</h3>
+          <p class="step-desc">Choose quality, trim video, add your watermark, or process multiple URLs at once.</p>
+        </div>
+        
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Download & Enjoy</h3>
+          <p class="step-desc">Save the processed video to your device in your preferred format.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section class="faq" id="faq">
+      <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Is this tool free to use?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, our TikTok Watermark Remover is completely free to use with no hidden charges. You can download as many videos as you want without any limitations.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How does batch downloading work?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Simply enable batch mode and add multiple TikTok URLs. Our system will process them one by one and prepare a zip file with all your downloads.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Can I customize the watermark I add?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Yes! You can upload your own watermark image, adjust its opacity, and choose from 9 different positions on the video.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>What video formats are supported?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>We support MP4 for videos, MP3 for audio, and GIF format for short clips. You can choose your preferred format before downloading.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Is my data secure with user accounts?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <p>Absolutely. We use industry-standard encryption and never store your downloaded videos on our servers.</p>
+        </div>
+      </div>
+    </section>
+    
+    <footer id="contact">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3 class="footer-title">TikSnap Pro</h3>
+          <p>The most advanced TikTok Watermark Remover tool with powerful features for content creators.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#downloader">Watermark Remover</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">DMCA</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-title">Contact</h3>
+          <ul class="footer-links">
+            <li><a href="mailto:support@tiksnappro.com">support@tiksnappro.com</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Report Issue</a></li>
+            <li><a href="#">Feedback</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="copyright">
+        &copy; 2023 TikSnap Pro. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Theme toggle
+      const themeToggle = document.getElementById('themeToggle');
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      const currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+      
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      
+      if (currentTheme === 'light') {
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+      
+      themeToggle.addEventListener('click', function() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (newTheme === 'light') {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+      });
+      
+      // Mobile menu toggle
+      const mobileMenuBtn = document.getElementById('mobileMenu');
+      const nav = document.getElementById('mainNav');
+      
+      mobileMenuBtn.addEventListener('click', function() {
+        nav.classList.toggle('active');
+        mobileMenuBtn.innerHTML = nav.classList.contains('active') ? 
+          '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      });
+      
+      // Close mobile menu when clicking on a link
+      document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('active');
+          mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        });
+      });
+      
+      // FAQ accordion
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+      
+      // Auth modal
+      const authModal = document.getElementById('authModal');
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      const closeAuth = document.getElementById('closeAuth');
+      const showSignup = document.getElementById('showSignup');
+      const showLogin = document.getElementById('showLogin');
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+      const authTabs = document.querySelectorAll('.auth-tab');
+      
+      function openAuthModal(tab) {
+        authModal.style.display = 'flex';
+        if (tab === 'login') {
+          loginForm.classList.add('active');
+          signupForm.classList.remove('active');
+          authTabs[0].classList.add('active');
+          authTabs[1].classList.remove('active');
+        } else {
+          loginForm.classList.remove('active');
+          signupForm.classList.add('active');
+          authTabs[0].classList.remove('active');
+          authTabs[1].classList.add('active');
+        }
+      }
+      
+      loginBtn.addEventListener('click', () => openAuthModal('login'));
+      signupBtn.addEventListener('click', () => openAuthModal('signup'));
+      showSignup.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuthModal('signup');
+      });
+      showLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        openAuthModal('login');
+      });
+      closeAuth.addEventListener('click', () => {
+        authModal.style.display = 'none';
+      });
+      authModal.addEventListener('click', (e) => {
+        if (e.target === authModal) {
+          authModal.style.display = 'none';
+        }
+      });
+      
+      authTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabName = tab.getAttribute('data-tab');
+          authTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          if (tabName === 'login') {
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+          } else {
+            loginForm.classList.remove('active');
+            signupForm.classList.add('active');
+          }
+        });
+      });
+      
+      // Form submission (simulated)
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Login functionality would be implemented with a backend service');
+        authModal.style.display = 'none';
+      });
+      
+      signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Signup functionality would be implemented with a backend service');
+        authModal.style.display = 'none';
+      });
+      
+      // Video downloader functionality
+      const form = document.getElementById('downloadForm');
+      const urlInput = document.getElementById('videoUrl');
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+      const videoContainer = document.getElementById('videoContainer');
+      const videoWrapper = document.querySelector('.video-wrapper');
+      const videoThumbnail = document.getElementById('videoThumbnail');
+      const playButton = document.getElementById('playButton');
+      const videoPlayer = document.getElementById('videoPlayer');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const saveAudioBtn = document.getElementById('saveAudioBtn');
+      const saveGifBtn = document.getElementById('saveGifBtn');
+      const loading = document.getElementById('loading');
+      const submitBtn = document.getElementById('submitBtn');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressPercent = document.getElementById('progressPercent');
+      const downloadedSize = document.getElementById('downloadedSize');
+      const totalSize = document.getElementById('totalSize');
+      const videoQuality = document.getElementById('videoQuality');
+      const videoSize = document.getElementById('videoSize');
+      const videoDuration = document.getElementById('videoDuration');
+      const watermarkStatus = document.getElementById('watermarkStatus');
+      const qualitySelector = document.getElementById('qualitySelector');
+      const qualityBtns = document.querySelectorAll('.quality-btn');
+      const shareFacebook = document.getElementById('shareFacebook');
+      const shareTwitter = document.getElementById('shareTwitter');
+      const shareWhatsapp = document.getElementById('shareWhatsapp');
+      const historyContainer = document.getElementById('historyContainer');
+      const historyList = document.getElementById('historyList');
+      const clearHistory = document.getElementById('clearHistory');
+      const viewCount = document.getElementById('viewCount');
+      const likeCount = document.getElementById('likeCount');
+      const commentCount = document.getElementById('commentCount');
+      
+      // Batch download elements
+      const batchToggle = document.getElementById('batchToggle');
+      const batchContainer = document.getElementById('batchContainer');
+      const batchList = document.getElementById('batchList');
+      const addBatchUrl = document.getElementById('addBatchUrl');
+      const clearBatchUrls = document.getElementById('clearBatchUrls');
+      
+      // Trim elements
+      const trimToggle = document.getElementById('trimToggle');
+      const trimContainer = document.getElementById('trimContainer');
+      const trimStart = document.getElementById('trimStart');
+      const trimEnd = document.getElementById('trimEnd');
+      const trimStartValue = document.getElementById('trimStartValue');
+      const trimEndValue = document.getElementById('trimEndValue');
+      
+      // Watermark elements
+      const watermarkToggle = document.getElementById('watermarkToggle');
+      const watermarkContainer = document.getElementById('watermarkContainer');
+      const watermarkImage = document.getElementById('watermarkImage');
+      const watermarkOpacity = document.getElementById('watermarkOpacity');
+      const watermarkPreview = document.getElementById('watermarkPreview');
+      const positionBtns = document.querySelectorAll('.position-btn');
+      
+      // Video modal elements
+      const videoModal = document.getElementById('videoModal');
+      const modalVideoPlayer = document.getElementById('modalVideoPlayer');
+      const closeModal = document.getElementById('closeModal');
+      const fullscreenBtn = document.getElementById('fullscreenBtn');
+      const zoomInBtn = document.getElementById('zoomInBtn');
+      const zoomOutBtn = document.getElementById('zoomOutBtn');
+      const resetZoomBtn = document.getElementById('resetZoomBtn');
+      
+      // Video control elements
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const rewindBtn = document.getElementById('rewindBtn');
+      const forwardBtn = document.getElementById('forwardBtn');
+      const muteBtn = document.getElementById('muteBtn');
+      const speedBtn = document.getElementById('speedBtn');
+      const loopBtn = document.getElementById('loopBtn');
+      
+      let currentVideoUrl = '';
+      let videoFilename = '';
+      let videoInfo = {};
+      let downloadHistory = JSON.parse(localStorage.getItem('tiktokDownloads')) || [];
+      let currentZoom = 1;
+      let currentWatermarkPosition = 'top-left';
+      
+      // Initialize history
+      function initHistory() {
+        if (downloadHistory.length > 0) {
+          historyContainer.style.display = 'block';
+          historyList.innerHTML = '';
+          
+          downloadHistory.slice(0, 5).forEach((item, index) => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+              <a href="${item.url}" target="_blank">${item.title}</a>
+              <button class="delete-btn" data-index="${index}">
+                <i class="fas fa-trash"></i>
+              </button>
+            `;
+            historyList.appendChild(historyItem);
+          });
+          
+          // Add event listeners to delete buttons
+          document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const index = parseInt(this.getAttribute('data-index'));
+              downloadHistory.splice(index, 1);
+              localStorage.setItem('tiktokDownloads', JSON.stringify(downloadHistory));
+              initHistory();
+            });
+          });
+        } else {
+          historyContainer.style.display = 'none';
+        }
+      }
+      
+      // Clear history
+      clearHistory.addEventListener('click', function() {
+        downloadHistory = [];
+        localStorage.setItem('tiktokDownloads', JSON.stringify(downloadHistory));
+        initHistory();
+      });
+      
+      // Add to history
+      function addToHistory(url, title) {
+        // Check if already exists
+        const exists = downloadHistory.some(item => item.url === url);
+        if (!exists) {
+          downloadHistory.unshift({ url, title });
+          localStorage.setItem('tiktokDownloads', JSON.stringify(downloadHistory));
+          initHistory();
+        }
+      }
+      
+      // Initialize on load
+      initHistory();
+      
+      // Batch download functionality
+      batchToggle.addEventListener('change', function() {
+        batchContainer.style.display = this.checked ? 'block' : 'none';
+      });
+      
+      addBatchUrl.addEventListener('click', function() {
+        const batchItem = document.createElement('div');
+        batchItem.className = 'batch-item';
+        batchItem.innerHTML = `
+          <input type="url" placeholder="Paste TikTok URL">
+          <button class="remove-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        `;
+        batchList.appendChild(batchItem);
+        
+        // Add event listener to remove button
+        batchItem.querySelector('.remove-btn').addEventListener('click', function() {
+          batchItem.remove();
+        });
+      });
+      
+      clearBatchUrls.addEventListener('click', function() {
+        batchList.innerHTML = '';
+      });
+      
+      // Trim functionality
+      trimToggle.addEventListener('change', function() {
+        trimContainer.style.display = this.checked ? 'block' : 'none';
+      });
+      
+      trimStart.addEventListener('input', function() {
+        trimStartValue.textContent = this.value + 's';
+        if (parseInt(this.value) > parseInt(trimEnd.value)) {
+          trimEnd.value = this.value;
+          trimEndValue.textContent = this.value + 's';
+        }
+      });
+      
+      trimEnd.addEventListener('input', function() {
+        trimEndValue.textContent = this.value + 's';
+        if (parseInt(this.value) < parseInt(trimStart.value)) {
+          trimStart.value = this.value;
+          trimStartValue.textContent = this.value + 's';
+        }
+      });
+      
+      // Watermark functionality
+      watermarkToggle.addEventListener('change', function() {
+        watermarkContainer.style.display = this.checked ? 'block' : 'none';
+      });
+      
+      watermarkImage.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            watermarkPreview.src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      watermarkOpacity.addEventListener('input', function() {
+        if (watermarkPreview.src) {
+          watermarkPreview.style.opacity = this.value / 100;
+        }
+      });
+      
+      positionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          positionBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentWatermarkPosition = this.getAttribute('data-position');
+          updateWatermarkPosition();
+        });
+      });
+      
+      function updateWatermarkPosition() {
+        if (!watermarkPreview.src) return;
+        
+        watermarkPreview.style.position = 'absolute';
+        
+        switch(currentWatermarkPosition) {
+          case 'top-left':
+            watermarkPreview.style.top = '10px';
+            watermarkPreview.style.left = '10px';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            break;
+          case 'top-center':
+            watermarkPreview.style.top = '10px';
+            watermarkPreview.style.left = '50%';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            watermarkPreview.style.transform = 'translateX(-50%)';
+            break;
+          case 'top-right':
+            watermarkPreview.style.top = '10px';
+            watermarkPreview.style.right = '10px';
+            watermarkPreview.style.left = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            break;
+          case 'middle-left':
+            watermarkPreview.style.top = '50%';
+            watermarkPreview.style.left = '10px';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            watermarkPreview.style.transform = 'translateY(-50%)';
+            break;
+          case 'middle-center':
+            watermarkPreview.style.top = '50%';
+            watermarkPreview.style.left = '50%';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            watermarkPreview.style.transform = 'translate(-50%, -50%)';
+            break;
+          case 'middle-right':
+            watermarkPreview.style.top = '50%';
+            watermarkPreview.style.right = '10px';
+            watermarkPreview.style.left = 'auto';
+            watermarkPreview.style.bottom = 'auto';
+            watermarkPreview.style.transform = 'translateY(-50%)';
+            break;
+          case 'bottom-left':
+            watermarkPreview.style.bottom = '10px';
+            watermarkPreview.style.left = '10px';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.top = 'auto';
+            break;
+          case 'bottom-center':
+            watermarkPreview.style.bottom = '10px';
+            watermarkPreview.style.left = '50%';
+            watermarkPreview.style.right = 'auto';
+            watermarkPreview.style.top = 'auto';
+            watermarkPreview.style.transform = 'translateX(-50%)';
+            break;
+          case 'bottom-right':
+            watermarkPreview.style.bottom = '10px';
+            watermarkPreview.style.right = '10px';
+            watermarkPreview.style.left = 'auto';
+            watermarkPreview.style.top = 'auto';
+            break;
+        }
+      }
+      
+      // Play button click handler
+      playButton.addEventListener('click', function() {
+        videoWrapper.classList.add('video-loaded');
+        videoPlayer.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      });
+      
+      // Open video in modal
+      videoPlayer.addEventListener('click', function() {
+        videoModal.style.display = 'flex';
+        modalVideoPlayer.src = videoPlayer.src;
+        modalVideoPlayer.currentTime = videoPlayer.currentTime;
+        modalVideoPlayer.play();
+      });
+      
+      // Close modal
+      closeModal.addEventListener('click', function() {
+        videoModal.style.display = 'none';
+        modalVideoPlayer.pause();
+      });
+      
+      // Close modal when clicking outside
+      videoModal.addEventListener('click', function(e) {
+        if (e.target === videoModal) {
+          videoModal.style.display = 'none';
+          modalVideoPlayer.pause();
+        }
+      });
+      
+      // Fullscreen button
+      fullscreenBtn.addEventListener('click', function() {
+        if (videoPlayer.requestFullscreen) {
+          videoPlayer.requestFullscreen();
+        } else if (videoPlayer.webkitRequestFullscreen) {
+          videoPlayer.webkitRequestFullscreen();
+        } else if (videoPlayer.msRequestFullscreen) {
+          videoPlayer.msRequestFullscreen();
+        }
+      });
+      
+      // Zoom controls
+      zoomInBtn.addEventListener('click', function() {
+        currentZoom += 0.1;
+        videoPlayer.style.transform = `scale(${currentZoom})`;
+      });
+      
+      zoomOutBtn.addEventListener('click', function() {
+        if (currentZoom > 0.5) {
+          currentZoom -= 0.1;
+          videoPlayer.style.transform = `scale(${currentZoom})`;
+        }
+      });
+      
+      resetZoomBtn.addEventListener('click', function() {
+        currentZoom = 1;
+        videoPlayer.style.transform = 'scale(1)';
+      });
+      
+      // Video controls
+      playPauseBtn.addEventListener('click', function() {
+        if (videoPlayer.paused) {
+          videoPlayer.play();
+          playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+          videoPlayer.pause();
+          playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+      });
+      
+      rewindBtn.addEventListener('click', function() {
+        videoPlayer.currentTime -= 10;
+      });
+      
+      forwardBtn.addEventListener('click', function() {
+        videoPlayer.currentTime += 10;
+      });
+      
+      muteBtn.addEventListener('click', function() {
+        videoPlayer.muted = !videoPlayer.muted;
+        muteBtn.innerHTML = videoPlayer.muted ? 
+          '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+      });
+      
+      speedBtn.addEventListener('click', function() {
+        const speeds = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+        const currentSpeed = videoPlayer.playbackRate;
+        const currentIndex = speeds.indexOf(currentSpeed);
+        const nextIndex = (currentIndex + 1) % speeds.length;
+        videoPlayer.playbackRate = speeds[nextIndex];
+        speedBtn.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${speeds[nextIndex]}x`;
+      });
+      
+      loopBtn.addEventListener('click', function() {
+        videoPlayer.loop = !videoPlayer.loop;
+        loopBtn.style.background = videoPlayer.loop ? 'var(--primary)' : 'var(--input-bg)';
+      });
+      
+      // Update video player controls when video is playing/paused
+      videoPlayer.addEventListener('play', function() {
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      });
+      
+      videoPlayer.addEventListener('pause', function() {
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      });
+      
+      // Quality selector
+      qualityBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          qualityBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // In a real implementation, you would change the video quality here
+          // For demo, we'll just update the quality text
+          const quality = this.getAttribute('data-quality');
+          if (quality === 'hd') {
+            videoQuality.textContent = 'HD 1080p';
+          } else if (quality === 'sd') {
+            videoQuality.textContent = 'SD 720p';
+          } else {
+            videoQuality.textContent = 'Audio Only';
+          }
+        });
+      });
+      
+      // Share buttons
+      shareFacebook.addEventListener('click', function() {
+        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      });
+      
+      shareTwitter.addEventListener('click', function() {
+        const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=Check%20out%20this%20awesome%20TikTok%20Watermark%20Remover!`;
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      });
+      
+      shareWhatsapp.addEventListener('click', function() {
+        const shareUrl = `https://wa.me/?text=Check%20out%20this%20awesome%20TikTok%20Watermark%20Remover!%20${encodeURIComponent(window.location.href)}`;
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+      });
+      
+      // Function to fetch video without watermark
+      async function fetchVideo(url) {
+        try {
+          // First try with the primary API
+          const apiUrl = `https://api.tiklydown.eu.org/api/download?url=${encodeURIComponent(url)}`;
+          const response = await fetch(apiUrl);
+          
+          if (!response.ok) throw new Error('Failed to fetch video');
+          
+          const data = await response.json();
+          
+          if (data.video && data.video.noWatermark) {
+            return {
+              url: data.video.noWatermark,
+              thumbnail: data.video.cover || '',
+              success: true,
+              author: data.author?.nickname || 'tiktok',
+              id: data.video?.id || Date.now(),
+              duration: data.video?.duration || 0,
+              resolution: data.video?.resolution || '720x1280',
+              title: data.music?.title || 'TikTok Video',
+              views: data.video?.playCount || 0,
+              likes: data.video?.diggCount || 0,
+              comments: data.video?.commentCount || 0
+            };
+          } else {
+            throw new Error('No watermark video not found');
+          }
+        } catch (error) {
+          console.log('Primary API failed, trying backup...');
+          // If primary API fails, try with backup API
+          try {
+            const backupUrl = `https://tikwm.com/api/?url=${encodeURIComponent(url)}`;
+            const backupResponse = await fetch(backupUrl);
+            
+            if (!backupResponse.ok) throw new Error('Backup API failed');
+            
+            const backupData = await backupResponse.json();
+            
+            if (backupData.data && backupData.data.play) {
+              return {
+                url: backupData.data.play,
+                thumbnail: backupData.data.cover || '',
+                success: true,
+                author: backupData.data?.author?.nickname || 'tiktok',
+                id: backupData.data?.id || Date.now(),
+                duration: backupData.data?.duration || 0,
+                resolution: backupData.data?.resolution || '720x1280',
+                title: backupData.data?.music_info?.title || 'TikTok Video',
+                views: backupData.data?.play_count || 0,
+                likes: backupData.data?.digg_count || 0,
+                comments: backupData.data?.comment_count || 0
+              };
+            } else {
+              throw new Error(backupData.msg || 'Video not found');
+            }
+          } catch (backupError) {
+            throw new Error('Failed to download video. Please try another URL.');
+          }
+        }
+      }
+      
+      // Function to get video duration in MM:SS format
+      function formatDuration(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+      
+      // Function to format large numbers
+      function formatNumber(num) {
+        if (num >= 1000000) {
+          return (num / 1000000).toFixed(1) + 'M';
+        }
+        if (num >= 1000) {
+          return (num / 1000).toFixed(1) + 'K';
+        }
+        return num;
+      }
+      
+      // Function to trigger download with progress
+      function downloadWithProgress(url, filename) {
+        return new Promise((resolve, reject) => {
+          progressPercent.textContent = '0%';
+          progressBar.style.width = '0%';
+          downloadedSize.textContent = '0 MB';
+          totalSize.textContent = '0 MB';
+          
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', url, true);
+          xhr.responseType = 'blob';
+          
+          xhr.onprogress = function(event) {
+            if (event.lengthComputable) {
+              const percentComplete = Math.round((event.loaded / event.total) * 100);
+              progressBar.style.width = percentComplete + '%';
+              progressPercent.textContent = percentComplete + '%';
+              
+              const downloadedMB = (event.loaded / (1024 * 1024)).toFixed(1);
+              const totalMB = (event.total / (1024 * 1024)).toFixed(1);
+              
+              downloadedSize.textContent = `${downloadedMB} MB`;
+              totalSize.textContent = `${totalMB} MB`;
+              
+              if (percentComplete === 100) {
+                progressPercent.textContent = 'Processing...';
+              }
+            }
+          };
+          
+          xhr.onload = function() {
+            if (this.status === 200) {
+              const blob = this.response;
+              const blobUrl = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = blobUrl;
+              a.download = filename || `tiktok_${Date.now()}.mp4`;
+              
+              document.body.appendChild(a);
+              a.click();
+              
+              setTimeout(() => {
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+                progressPercent.textContent = 'Complete!';
+                resolve();
+              }, 100);
+            } else {
+              reject(new Error('Download failed'));
+            }
+          };
+          
+          xhr.onerror = function() {
+            reject(new Error('Download error'));
+          };
+          
+          xhr.send();
+        });
+      }
+      
+      // Function to extract audio from video
+      async function extractAudio(videoUrl, filename) {
+        try {
+          // In a real implementation, you would process the video to extract audio
+          // For this demo, we'll just show the UI flow
+          progressContainer.style.display = 'block';
+          progressBar.style.width = '0%';
+          progressPercent.textContent = 'Extracting audio...';
+          
+          // Simulate processing
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 5;
+            progressBar.style.width = progress + '%';
+            progressPercent.textContent = progress + '%';
+            
+            if (progress >= 100) {
+              clearInterval(interval);
+              setTimeout(() => {
+                // This would actually convert the video to audio
+                // For demo, we'll just trigger the video download
+                downloadWithProgress(videoUrl, filename.replace('.mp4', '.mp3'));
+              }, 500);
+            }
+          }, 100);
+          
+        } catch (error) {
+          showError('Audio extraction failed: ' + error.message);
+          progressContainer.style.display = 'none';
+        }
+      }
+      
+      // Function to create GIF from video
+      async function createGif(videoUrl, filename) {
+        try {
+          progressContainer.style.display = 'block';
+          progressBar.style.width = '0%';
+          progressPercent.textContent = 'Creating GIF...';
+          
+          // Simulate processing
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 5;
+            progressBar.style.width = progress + '%';
+            progressPercent.textContent = progress + '%';
+            
+            if (progress >= 100) {
+              clearInterval(interval);
+              setTimeout(() => {
+                // In a real implementation, you would create a GIF from the video
+                // For demo, we'll just show a success message
+                showSuccess('GIF created successfully! (Demo)');
+                progressContainer.style.display = 'none';
+              }, 500);
+            }
+          }, 100);
+          
+        } catch (error) {
+          showError('GIF creation failed: ' + error.message);
+          progressContainer.style.display = 'none';
+        }
+      }
+      
+      // Function to process batch downloads
+      async function processBatchDownloads(urls) {
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressPercent.textContent = 'Preparing batch download...';
+        
+        // Simulate processing each URL
+        for (let i = 0; i < urls.length; i++) {
+          const url = urls[i];
+          progressPercent.textContent = `Processing ${i+1}/${urls.length}...`;
+          progressBar.style.width = `${(i / urls.length) * 100}%`;
+          
+          try {
+            // Simulate processing delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          } catch (error) {
+            console.error(`Error processing URL: ${url}`, error);
+          }
+        }
+        
+        progressBar.style.width = '100%';
+        progressPercent.textContent = 'Creating zip file...';
+        
+        // Simulate zip creation
+        setTimeout(() => {
+          showSuccess(`Batch download complete! ${urls.length} videos processed. (Demo)`);
+          progressContainer.style.display = 'none';
+          
+          // Add all to history
+          urls.forEach(url => {
+            addToHistory(url, `Batch video ${Date.now()}`);
+          });
+        }, 1500);
+      }
+      
+      // Function to show error message
+      function showError(message) {
+        errorMsg.textContent = message;
+        errorMsg.style.display = 'block';
+        successMsg.style.display = 'none';
+        setTimeout(() => {
+          errorMsg.style.display = 'none';
+        }, 5000);
+      }
+      
+      // Function to show success message
+      function showSuccess(message) {
+        successMsg.textContent = message;
+        successMsg.style.display = 'block';
+        errorMsg.style.display = 'none';
+        setTimeout(() => {
+          successMsg.style.display = 'none';
+        }, 3000);
+      }
+      
+      // Form submission handler
+      submitBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        // Check if in batch mode
+        if (batchToggle.checked) {
+          const batchUrls = Array.from(document.querySelectorAll('.batch-item input'))
+            .map(input => input.value.trim())
+            .filter(url => url !== '' && url.includes('tiktok.com'));
+          
+          if (batchUrls.length === 0) {
+            showError('Please add at least one valid TikTok URL');
+            return;
+          }
+          
+          await processBatchDownloads(batchUrls);
+          return;
+        }
+        
+        // Single URL mode
+        const url = urlInput.value.trim();
+        
+        // Validate URL
+        if (!url) {
+          showError('Please enter a TikTok video URL');
+          return;
+        }
+        
+        if (!url.includes('tiktok.com')) {
+          showError('Please enter a valid TikTok URL');
+          return;
+        }
+        
+        // Reset UI
+        videoContainer.style.display = 'none';
+        videoWrapper.classList.remove('video-loaded');
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+        loading.style.display = 'block';
+        submitBtn.disabled = true;
+        progressContainer.style.display = 'none';
+        
+        try {
+          const result = await fetchVideo(url);
+          
+          if (result.success) {
+            currentVideoUrl = result.url;
+            videoFilename = `tiktok_${result.author}_${result.id}.mp4`;
+            videoInfo = result;
+            
+            // Set thumbnail if available
+            if (result.thumbnail) {
+              videoThumbnail.src = result.thumbnail;
+              videoThumbnail.style.display = 'block';
+            } else {
+              videoThumbnail.style.display = 'none';
+            }
+            
+            // Set video info
+            const resolution = result.resolution.split('x');
+            const quality = resolution[1] >= 1080 ? 'HD 1080p' : 
+                          resolution[1] >= 720 ? 'HD 720p' : 'SD';
+            
+            videoQuality.textContent = quality;
+            videoSize.textContent = 'Processing...';
+            videoDuration.textContent = formatDuration(result.duration);
+            watermarkStatus.textContent = 'Removed';
+            watermarkStatus.style.color = 'var(--success)';
+            
+            // Set stats
+            viewCount.textContent = formatNumber(result.views) + ' views';
+            likeCount.textContent = formatNumber(result.likes) + ' likes';
+            commentCount.textContent = formatNumber(result.comments) + ' comments';
+            
+            // Load video
+            videoPlayer.src = result.url;
+            videoPlayer.load();
+            
+            // When metadata is loaded, update size info
+            videoPlayer.onloadedmetadata = function() {
+              const sizeMB = (videoPlayer.duration * 1.5).toFixed(1); // Approximate
+              videoSize.textContent = `${sizeMB} MB`;
+            };
+            
+            // Set up download button
+            downloadBtn.onclick = async function(e) {
+              e.preventDefault();
+              progressContainer.style.display = 'block';
+              progressBar.style.width = '0%';
+              progressPercent.textContent = 'Starting download...';
+              
+              try {
+                await downloadWithProgress(currentVideoUrl, videoFilename);
+                showSuccess('Video downloaded successfully!');
+                addToHistory(currentVideoUrl, videoInfo.title);
+              } catch (error) {
+                showError('Download failed. Please try again.');
+              }
+            };
+            
+            // Set up audio extraction button
+            saveAudioBtn.onclick = async function(e) {
+              e.preventDefault();
+              await extractAudio(currentVideoUrl, videoFilename);
+              addToHistory(currentVideoUrl, `${videoInfo.title} (Audio)`);
+            };
+            
+            // Set up GIF creation button
+            saveGifBtn.onclick = async function(e) {
+              e.preventDefault();
+              await createGif(currentVideoUrl, videoFilename);
+              addToHistory(currentVideoUrl, `${videoInfo.title} (GIF)`);
+            };
+            
+            videoContainer.style.display = 'block';
+            showSuccess('Watermark removed successfully! Ready to download.');
+          } else {
+            showError('Failed to download video. Please try another URL.');
+          }
+        } catch (error) {
+          console.error('Download error:', error);
+          showError(error.message || 'An error occurred. Please try again.');
+        } finally {
+          loading.style.display = 'none';
+          submitBtn.disabled = false;
+        }
+      });
+      
+      // Clear error when user starts typing
+      urlInput.addEventListener('input', function() {
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+      });
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Add floating animation to feature cards with delay
+      document.querySelectorAll('.feature-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('animate__animated', 'animate__fadeInUp');
+      });
+      
+      // Add floating animation to step cards with delay
+      document.querySelectorAll('.step-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+        card.classList.add('animate__animated', 'animate__fadeInUp');
+      });
+    });
+  </script>
+</body>
+</html>
